@@ -1,0 +1,162 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.example.mynetwork
+
+abstract participant Trader {
+  	o Integer Latitude
+    o Integer Longitude
+  	o String companyName
+    o String emailID
+    o String ContactNumber
+    o String Address
+}
+
+participant Manufacturer identified by tradeId extends Trader {
+    o String tradeId
+    
+}
+participant Distributor identified by tradeId extends Trader {
+    o String tradeId
+}
+participant Wholesaler identified by tradeId extends Trader {
+    o String tradeId
+}
+participant Pharmacist identified by tradeId extends Trader {
+    o String tradeId
+}
+asset Drug identified by BatchSubId {
+  o String DrugId
+  o String DrugUPC
+  o String BatchSubId
+  o String BatchId
+  o String DrugBrandName
+  o String DrugGenericName
+  o String DrugStrength
+  o String DrugType
+  o Integer QtyProducedInBatch
+  o Integer QtyInAsset default = 10
+  o String Packaging
+  o String SellingPricePerUnit
+  o String ManufacturerId
+  o DateTime BatchExpiryDate
+  o Integer Latitude
+  o Integer Longitude
+  o String Address
+  o Integer Pincode	
+  --> Trader presentOwner
+}
+transaction M2W {
+  --> Drug drug
+  o Integer LatitudeWholesaler
+  o Integer LongitudeWholesaler	
+  --> Wholesaler newOwner
+}
+transaction W2D {
+  --> Drug drug
+  o Integer LatitudeDistributor
+  o Integer LongitudeDistributor
+  --> Distributor newOwner
+}
+transaction D2P {
+  --> Drug drug
+  o Integer LatitudePharmacist
+  o Integer LongitudePharmacist
+  --> Pharmacist newOwner
+}
+transaction W2M {
+  --> Drug drug
+  o Integer LatitudeManufacturer
+  o Integer LongitudeManufacturer
+  --> Manufacturer newOwner
+}
+transaction D2W {
+  --> Drug drug
+  o Integer LatitudeWholesaler
+  o Integer LongitudeWholesaler
+  --> Wholesaler newOwner
+}
+transaction P2D {
+  --> Drug drug
+  o Integer LatitudeDistributor
+  o Integer LongitudeDistributor
+  --> Distributor newOwner
+}
+asset WProposal identified by wproposalId {
+  o String wproposalId
+  --> Wholesaler wholesaler
+  o String requirements
+  o WProposalStatus status default = "WAITING_FOR_APPROVAL"
+}
+asset DProposal identified by dproposalId {
+  o String dproposalId
+  --> Distributor distributor
+  o String requirements
+  o DProposalStatus status default = "WAITING_FOR_APPROVAL"
+}
+asset PProposal identified by pproposalId {
+  o String pproposalId
+  --> Pharmacist pharmacist
+  o String requirements
+  o PProposalStatus status default = "WAITING_FOR_APPROVAL"
+}
+enum WProposalStatus {
+  o WAITING_FOR_APPROVAL
+  o REJECTED
+  o ACCEPTED
+}
+enum DProposalStatus {
+  o WAITING_FOR_APPROVAL
+  o REJECTED
+  o ACCEPTED
+}
+enum PProposalStatus {
+  o WAITING_FOR_APPROVAL
+  o REJECTED
+  o ACCEPTED
+}
+transaction MRejectProposal {
+  --> Manufacturer manufacturer
+  --> WProposal proposal
+  o DateTime dateTime
+}
+transaction WRejectProposal {
+  --> Wholesaler wholesaler
+  --> WProposal proposal
+  o DateTime dateTime
+}
+transaction DRejectProposal {
+  --> Distributor distributor
+  --> PProposal proposal
+  o DateTime dateTime
+}
+transaction MMakeDeal {
+  --> Manufacturer manufacturer
+  --> WProposal proposal
+  o DateTime dateTime
+}
+transaction WMakeDeal {
+  --> Wholesaler wholesaler
+  --> DProposal proposal
+  o DateTime dateTime
+}
+transaction DMakeDeal {
+  --> Distributor distributor
+  --> PProposal proposal
+  o DateTime dateTime
+}

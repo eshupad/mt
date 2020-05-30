@@ -1,0 +1,610 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Sample access control list.
+ */
+
+
+
+
+rule SystemACL {
+  description:  "System ACL to permit all access"
+  participant: "org.hyperledger.composer.system.Participant"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+
+rule ManufacturerCanUpdateSelf {
+  description: "Manufacturer can view and update their own record only"
+  participant(t): "org.example.mynetwork.Manufacturer"
+  operation: READ, UPDATE
+  resource(v): "org.example.mynetwork.Manufacturer"
+  condition: (v.getIdentifier() == t.getIdentifier())
+  action: ALLOW
+}
+
+rule WholesalerCanUpdateSelf {
+  description: "Wholesaler can view and update their own record only"
+  participant(t): "org.example.mynetwork.Wholesaler"
+  operation: READ, UPDATE
+  resource(v): "org.example.mynetwork.Wholesaler"
+  condition: (v.getIdentifier() == t.getIdentifier())
+  action: ALLOW
+}
+
+rule DistributorCanUpdateSelf {
+  description: "Distributor can view and update their own record only"
+  participant(t): "org.example.mynetwork.Distributor"
+  operation: READ, UPDATE
+  resource(v): "org.example.mynetwork.Distributor"
+  condition: (v.getIdentifier() == t.getIdentifier())
+  action: ALLOW
+}
+
+rule PharmacistCanUpdateSelf {
+  description: "Pharmacist can view and update their own record only"
+  participant(t): "org.example.mynetwork.Pharmacist"
+  operation: READ, UPDATE
+  resource(v): "org.example.mynetwork.Pharmacist"
+  condition: (v.getIdentifier() == t.getIdentifier())
+  action: ALLOW
+}
+
+rule ManufacturerCanViewManufacturer {
+  description: "Manufacturer can view other Manufacturers"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: READ
+  resource: "org.example.mynetwork.Manufacturer"
+  action: ALLOW
+}
+
+rule WholesalerCanViewManufacturer {
+  description: "Wholesaler can view other Manufacturers"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: READ
+  resource: "org.example.mynetwork.Manufacturer"
+  action: ALLOW
+}
+
+rule DistributorCanViewManufacturer {
+  description: "Distributor can view other Manufacturers"
+  participant: "org.example.mynetwork.Distributor"
+  operation: READ
+  resource: "org.example.mynetwork.Manufacturer"
+  action: ALLOW
+}
+
+rule PharmacistCanViewManufacturer {
+  description: "Pharmacist can view other Manufacturers"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: READ
+  resource: "org.example.mynetwork.Manufacturer"
+  action: ALLOW
+}
+
+rule ManufacturerCanViewDistributor {
+  description: "Manufacturer can view other Distributors"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: READ
+  resource: "org.example.mynetwork.Distributor"
+  action: ALLOW
+}
+
+rule DistributorCanViewDistributor {
+  description: "Distributor can view other Distributors"
+  participant: "org.example.mynetwork.Distributor"
+  operation: READ
+  resource: "org.example.mynetwork.Distributor"
+  action: ALLOW
+}
+
+rule WholesalerCanViewDistributor {
+  description: "Wholesaler can view other Distributors"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: READ
+  resource: "org.example.mynetwork.Distributor"
+  action: ALLOW
+}
+
+rule PharmacistCanViewDistributor {
+  description: "Pharmacist can view other Distributors"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: READ
+  resource: "org.example.mynetwork.Distributor"
+  action: ALLOW
+}
+
+
+rule ManufacturerCanViewWholesaler {
+  description: "Manufacturer can view other Wholesalers"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: READ
+  resource: "org.example.mynetwork.Wholesaler"
+  action: ALLOW
+}
+
+rule DistributorCanViewWholesaler {
+  description: "Distributor can view other Wholesalers"
+  participant: "org.example.mynetwork.Distributor"
+  operation: READ
+  resource: "org.example.mynetwork.Wholesaler"
+  action: ALLOW
+}
+
+rule WholesalerCanViewWholesaler {
+  description: "Wholesaler can view other Wholesalers"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: READ
+  resource: "org.example.mynetwork.Wholesaler"
+  action: ALLOW
+}
+
+rule PharmacistCanViewWholesaler {
+  description: "Pharmacist can view other Wholesalers"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: READ
+  resource: "org.example.mynetwork.Wholesaler"
+  action: ALLOW
+}
+
+
+rule ManufacturerCanViewPharmacist {
+  description: "Manufacturer can view other Pharmacists"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: READ
+  resource: "org.example.mynetwork.Pharmacist"
+  action: ALLOW
+}
+
+rule WholesalerCanViewPharmacist {
+  description: "Wholesaler can view other Pharmacists"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: READ
+  resource: "org.example.mynetwork.Pharmacist"
+  action: ALLOW
+}
+
+rule DistributorCanViewPharmacist {
+  description: "Distributor can view other Pharmacists"
+  participant: "org.example.mynetwork.Distributor"
+  operation: READ
+  resource: "org.example.mynetwork.Pharmacist"
+  action: ALLOW
+}
+
+rule PharmacistCanViewPharmacist {
+  description: "Pharmacist can view other Pharmacists"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: READ
+  resource: "org.example.mynetwork.Pharmacist"
+  action: ALLOW
+}
+
+rule PharmacistDoesNotCreateDrugs {
+    description: "Pharmacist can't create drugs"
+    participant: "org.example.mynetwork.Pharmacist"
+    operation: CREATE
+    resource: "org.example.mynetwork.Drug"
+    action: DENY
+}
+
+rule WholesalerDoesNotCreateDrugs {
+    description: "Wholesaler can't create drugs"
+    participant: "org.example.mynetwork.Wholesaler"
+    operation: CREATE
+    resource: "org.example.mynetwork.Drug"
+    action: DENY
+}
+
+rule DistributorDoesNotCreateDrugs {
+    description: "Distributor can't create drugs"
+    participant: "org.example.mynetwork.Distributor"
+    operation: CREATE
+    resource: "org.example.mynetwork.Drug"
+    action: DENY
+}
+
+rule ManufacturerUpdatesOwnDrug {
+  description: "Manufacturer can see/work with their own drugs"
+  participant(t): "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource(c): "org.example.mynetwork.Drug"
+  condition: (c.presentOwner.getIdentifier() == t.getIdentifier())
+  action: ALLOW
+}
+
+rule ManufacturerDoesNotUpdateOthersDrugs {
+  description: "Manufacturer can't work with others drugs"
+  participant(t): "org.example.mynetwork.Manufacturer"
+  operation: CREATE, UPDATE, DELETE
+  resource(c): "org.example.mynetwork.Drug"
+  condition: (c.presentOwner.getIdentifier() != t.getIdentifier())
+  action: DENY
+}
+
+rule WholesalerDoesNotUpdateOthersDrugs {
+  description: "Wholesaler can't work with others drugs"
+  participant(t): "org.example.mynetwork.Wholesaler"
+  operation: CREATE, UPDATE, DELETE
+  resource(c): "org.example.mynetwork.Drug"
+  condition: (c.presentOwner.getIdentifier() != t.getIdentifier())
+  action: DENY
+}
+
+rule DistributorDoesNotUpdateOthersDrugs {
+  description: "Distributor can't work with others drugs"
+  participant(t): "org.example.mynetwork.Distributor"
+  operation: CREATE, UPDATE, DELETE
+  resource(c): "org.example.mynetwork.Drug"
+  condition: (c.presentOwner.getIdentifier() != t.getIdentifier())
+  action: DENY
+}
+
+rule PharmacistDoesNotUpdateOthersDrugs {
+  description: "Pharmacist can't work with others drugs"
+  participant(t): "org.example.mynetwork.Pharmacist"
+  operation: CREATE, UPDATE, DELETE
+  resource(c): "org.example.mynetwork.Drug"
+  condition: (c.presentOwner.getIdentifier() != t.getIdentifier())
+  action: DENY
+}
+
+rule ManufacturerCanAccessM2W {
+  description: "Manufacturer can access the transaction M2W"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.M2W"
+  action: ALLOW
+}
+
+rule WholesalerCannotAccessM2W {
+  description: "Wholesaler can't access the transaction M2W"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.M2W"
+  action: ALLOW
+}
+
+rule WholesalerCanAccessW2M {
+  description: "Wholesaler can access the transaction W2M"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.W2M"
+  action: ALLOW
+}
+
+rule WholesalerCanAccessW2D {
+  description: "Wholesaler can access the transaction W2D"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.W2D"
+  action: ALLOW
+}
+
+rule DistributorCanAccessD2W {
+  description: "Distributor can access the transaction D2W"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.D2W"
+  action: ALLOW
+}
+
+rule DistributorCanAccessD2P {
+  description: "Distributor can access the transaction D2P"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.D2P"
+  action: ALLOW
+}
+
+rule PharmacistCanAccessP2D {
+  description: "Pharmacist can access the transaction P2D"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.P2D"
+  action: ALLOW
+}
+
+rule ManufacturerCanViewDrug {
+  description: "Manufacturer can see/work with their own drugs"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.Drug"
+  action: ALLOW
+}
+
+rule WholesalerCanViewDrug {
+  description: "Wholesaler can see/work with their own drugs"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.Drug"
+  action: ALLOW
+}
+
+rule DistributorCanViewDrug {
+  description: "Distributor can see/work with their own drugs"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.Drug"
+  action: ALLOW
+}
+
+rule PharmacistCanViewDrug {
+  description: "Pharmacist can see/work with their own drugs"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.Drug"
+  action: ALLOW
+}
+
+
+rule DistributorAccessesDProposal {
+  description: "Distributor can see/work with own proposal"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.DProposal"
+  action: ALLOW
+}
+
+rule WholesalerAccessesDProposal {
+  description: "Wholesaler can see with Distributor's proposal"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: READ
+  resource: "org.example.mynetwork.DProposal"
+  action: ALLOW
+}
+
+rule PharmacistAccessesPProposal {
+  description: "Distributor can see/work with own proposal"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.PProposal"
+  action: ALLOW
+}
+
+rule DistributorAccessesPProposal {
+  description: "Distributor can see Pharmacist's proposal"
+  participant: "org.example.mynetwork.Distributor"
+  operation: READ
+  resource: "org.example.mynetwork.PProposal"
+  action: ALLOW
+}
+
+rule WholesalerAccessesWProposal {
+  description: "Wholesaler can see/work with own proposal"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.WProposal"
+  action: ALLOW
+}
+
+rule ManufacturerAccessesWProposal {
+  description: "Manufacturer can see Wholesaler's proposal"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: READ
+  resource: "org.example.mynetwork.WProposal"
+  action: ALLOW
+}
+
+
+rule DistributorAccessesDMakeDeal {
+  description: "Distributor can see/work with Distributor's Make Deal Tx"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.DMakeDeal"
+  action: ALLOW
+}
+
+rule ManufacturerDoesNotAccessDMakeDeal {
+  description: "Manufacturer cannot work with Distributor's Make Deal Tx"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.DMakeDeal"
+  action: DENY
+}
+
+rule WholesalerDoesNotAccessDMakeDeal {
+  description: "Wholesaler cannot work with Distributor's Make Deal Tx"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.DMakeDeal"
+  action: DENY
+}
+
+rule PharmacistDoesNotAccessDMakeDeal {
+  description: "Pharmacist cannot work with Distributor's Make Deal Tx"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.DMakeDeal"
+  action: DENY
+}
+
+rule WholesalerAccessesWMakeDeal {
+  description: "Wholesaler can see/work with Wholesaler's Make Deal Tx"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.WMakeDeal"
+  action: ALLOW
+}
+
+rule ManufacturerDoesNotAccessWMakeDeal {
+  description: "Manufacturer cannot work with Wholesaler's Make Deal Tx"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.WMakeDeal"
+  action: DENY
+}
+
+rule DistributorDoesNotAccessWMakeDeal {
+  description: "Manufacturer cannot work with Wholesaler's Make Deal Tx"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.WMakeDeal"
+  action: DENY
+}
+
+rule PharmacistDoesNotAccessWMakeDeal {
+  description: "Pharmacist cannot work with Wholesaler's Make Deal Tx"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.WMakeDeal"
+  action: DENY
+}
+
+rule ManufacturerAccessesMMakeDeal {
+  description: "Manufacturer can see/work with Manufacturer's Make Deal Tx"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.MMakeDeal"
+  action: ALLOW
+}
+
+rule WholesalerDoesNotAccessMMakeDeal {
+  description: "Wholesaler cannot work with Manufacturer's Make Deal Tx"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.MMakeDeal"
+  action: DENY
+}
+
+rule DistributorDoesNotAccessMMakeDeal {
+  description: "Distributor cannot work with Manufacturer's Make Deal Tx"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.MMakeDeal"
+  action: DENY
+}
+
+rule PharmacistDoesNotAccessMMakeDeal {
+  description: "Pharmacist cannot work with Manufacturer's Make Deal Tx"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.MMakeDeal"
+  action: DENY
+}
+
+rule DistributorAccessesDRejectProposal {
+  description: "Distributor can see/work with Distributor's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.DRejectProposal"
+  action: ALLOW
+}
+
+rule ManufacturerDoesNotAccessDRejectProposal {
+  description: "Manufacturer cannot work with Distributor's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.DRejectProposal"
+  action: DENY
+}
+
+rule WholesalerDoesNotAccessDRejectProposal {
+  description: "Wholesaler cannot work with Distributor's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.DRejectProposal"
+  action: DENY
+}
+
+rule PharmacistDoesNotAccessDRejectProposal {
+  description: "Pharmacist cannot work with Distributor's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.DRejectProposal"
+  action: DENY
+}
+
+rule WholesalerAccessesWRejectProposal {
+  description: "Wholesaler can see/work with Wholesaler's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.WRejectProposal"
+  action: ALLOW
+}
+
+rule ManufacturerDoesNotAccessWRejectProposal {
+  description: "Manufacturer cannot work with Wholesaler's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.WRejectProposal"
+  action: DENY
+}
+
+rule DistributorDoesNotAccessWRejectProposal {
+  description: "Manufacturer cannot work with Wholesaler's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.WRejectProposal"
+  action: DENY
+}
+
+rule PharmacistDoesNotAccessWRejectProposal {
+  description: "Pharmacist cannot work with Wholesaler's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.WRejectProposal"
+  action: DENY
+}
+
+rule ManufacturerAccessesMRejectProposal {
+  description: "Manufacturer can see/work with Manufacturer's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Manufacturer"
+  operation: ALL
+  resource: "org.example.mynetwork.MRejectProposal"
+  action: ALLOW
+}
+
+rule WholesalerDoesNotAccessMRejectProposal {
+  description: "Wholesaler cannot work with Manufacturer's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Wholesaler"
+  operation: ALL
+  resource: "org.example.mynetwork.MRejectProposal"
+  action: DENY
+}
+
+rule DistributorDoesNotAccessMRejectProposal {
+  description: "Distributor cannot work with Manufacturer's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Distributor"
+  operation: ALL
+  resource: "org.example.mynetwork.MRejectProposal"
+  action: DENY
+}
+
+rule PharmacistDoesNotAccessMRejectProposal {
+  description: "Pharmacist cannot work with Manufacturer's Reject Proposal Tx"
+  participant: "org.example.mynetwork.Pharmacist"
+  operation: ALL
+  resource: "org.example.mynetwork.MRejectProposal"
+  action: DENY
+}

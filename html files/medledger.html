@@ -1,0 +1,90 @@
+<html>
+  <head>
+  	<style>
+#drugs {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#drugs td, #drugs th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#drugs tr:nth-child(even){background-color: #f2f2f2;}
+
+#drugs tr:hover {background-color: #ddd;}
+
+#drugs th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+    <title> Drug Information </title>
+    <meta charset="UTF-8">
+    <script>
+      var baseurl = "http://localhost:3000/api/queries";
+      function loadDrugs(){
+        var xmlhttp = new XMLHttpRequest();
+        var x1 = prompt("Enter your curent latitude");
+        var y1 = prompt("Enter your current longitude");
+        var latt1 = parseInt(x1, 10);
+        var longt1 = parseInt(y1, 10);
+        xmlhttp.open("GET",baseurl + "/ViewAllGenericDrugs",true);
+        xmlhttp.onreadystatechange = function() {
+          if(xmlhttp.readyState ===4 && xmlhttp.status ===200){
+            var drugs = JSON.parse(xmlhttp.responseText);
+            var tbltop = `<table id = "drugs">
+			    <tr><th>BatchId</th><th>DrugUPC</th><th>Drug Generic Name</th><th>Drug Type</th><th>Qty Produced In current Batch</th><th>Qty in Asset</th><th>Packaging</th><th>Selling Price per Unit</th><th>Current Holder</th><th>Manufacturer</th><th>Batch Expiry Date</th><th>Current Latitude</th><th>Current Longitude</th><th>Distance From you</th><th>Logistics cost/km</th><th>Net Logistics Cost</tr>`;
+            //main table content we fill from data from the rest call
+            var main ="";
+            for (i = 0; i < drugs.length; i++){
+
+            	var latt2 = parseInt(drugs[i].Latitude, 10);
+            	var longt2 = parseInt(drugs[i].Longitude, 10);
+
+            		function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+						  var R = 6371; // Radius of the earth in km
+						  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+						  var dLon = deg2rad(lon2-lon1); 
+						  var a = 
+						    Math.sin(dLat/2) * Math.sin(dLat/2) +
+						    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+						    Math.sin(dLon/2) * Math.sin(dLon/2)
+						    ; 
+						  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+						  var d = R * c; // Distance in km
+						  return d;
+						}
+
+						function deg2rad(deg) {
+						  return deg * (Math.PI/180)
+						}
+
+						var distance = parseInt(getDistanceFromLatLonInKm(latt2, longt1, latt2, longt2));
+						var cost = 10*distance;
+
+							
+
+              main += "<tr><td>"+drugs[i].BatchId+"</td><td>"+drugs[i].DrugUPC+"</td><td>"+drugs[i].DrugGenericName+"</td><td>"+drugs[i].DrugType+"</td><td>"+drugs[i].QtyProducedInBatch+"</td><td>"+drugs[i].QtyInAsset+"</td><td>"+drugs[i].Packaging+"</td><td>"+drugs[i].SellingPricePerUnit+"</td><td>"+drugs[i].presentOwner.slice(31,)+"</td><td>"+drugs[i].ManufacturerId+"</td><td>"+drugs[i].BatchExpiryDate.slice(0,10)+"</td><td>"+drugs[i].Latitude+" deg"+"</td><td>"+drugs[i].Longitude+ " deg"+"</td><td>"+distance +" km"+"</td><td>"+"Rs. 10/km"+"</td><td>"+"Rs. "+cost+"</td></tr>";
+            }
+            var tblbottom = "</table>";
+            var tbl = tbltop + main + tblbottom;
+            document.getElementById("personinfo").innerHTML = tbl;
+          }
+        };
+        xmlhttp.send();
+      }
+      window.onload = function(){
+        loadDrugs();
+      }
+    </script>
+  </head>
+  <body>
+    <div id="personinfo"> </div>
+  </body>
+</html>

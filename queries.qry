@@ -1,0 +1,32 @@
+/**
+ * New query file
+ */
+query selectDrugByOwner {
+  description: "View Drugs owned by participant"
+  statement:
+      SELECT org.example.mynetwork.Drug
+          WHERE (presentOwner == _$presentOwner)
+}
+
+query ViewByDrugGenericName {
+  description: "View Drugs by name"
+  statement:
+      SELECT org.example.mynetwork.Drug
+          WHERE (DrugGenericName == _$DrugGenericName)
+}
+
+query ViewByBatchId {
+  description: "View Drugs by batches"
+  statement:
+      SELECT org.example.mynetwork.Drug
+          WHERE (BatchId == _$BatchId)
+}
+
+query ViewAllGenericDrugs {
+  description: "View All Generic Drugs"
+  statement:
+      SELECT org.example.mynetwork.Drug
+        
+          
+}
+
